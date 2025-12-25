@@ -65,9 +65,9 @@ Sau khi hoàn thành dự án, sinh viên có khả năng:
 ## IV. YÊU CẦU KỸ THUẬT
 
 * **Hệ điều hành:** Ubuntu Linux
-* **Ngôn ngữ:** Bash Script (.sh)
+* **Ngôn ngữ:** Python 3
 * **Môi trường:** Terminal
-* **Không sử dụng:** Python, C/C++, Java, thư viện SMTP có sẵn
+* **Không sử dụng:** Thư viện SMTP có sẵn
 
 ### Công cụ được phép sử dụng
 
@@ -82,22 +82,22 @@ Sau khi hoàn thành dự án, sinh viên có khả năng:
 ```bash
 smtp-linux/
 ├── bin/
-│   ├── start_server.sh
-│   └── start_client.sh
+│   ├── start_server.py
+│   └── start_client.py
 │
 ├── server/
-│   ├── server_main.sh
-│   ├── socket_listener.sh
-│   ├── smtp_parser.sh
-│   ├── auth_handler.sh
-│   ├── mail_handler.sh
-│   └── log_handler.sh
+│   ├── server_main.py
+│   ├── socket_listener.py
+│   ├── smtp_parser.py
+│   ├── auth_handler.py
+│   ├── mail_handler.py
+│   └── log_handler.py
 │
 ├── client/
-│   ├── client_main.sh
-│   ├── socket_client.sh
-│   ├── auth_client.sh
-│   └── mail_sender.sh
+│   ├── client_main.py
+│   ├── socket_client.py
+│   ├── auth_client.py
+│   └── mail_sender.py
 │
 ├── config/
 │   ├── server.conf
@@ -110,6 +110,7 @@ smtp-linux/
 │   └── smtp_server.log
 │
 └── README.md
+
 ```
 
 ---
@@ -120,21 +121,21 @@ smtp-linux/
 
 | File                 | Người thực hiện   | Chức năng             | Interface                                                    |
 | -------------------- | ----------------- | --------------------- | ------------------------------------------------------------------ |
-| `server_main.sh`     | Nguyễn Văn Thắng  | Điều phối server      | Gọi `socket_listener.sh`, chuyển stdin/stdout cho `smtp_parser.sh` |
-| `socket_listener.sh` | Nguyễn Ngọc Trung | Mở cổng TCP SMTP      | Truyền stdin/stdout của kết nối TCP                                |
-| `smtp_parser.sh`     | Phan Đình Trọng   | Phân tích lệnh SMTP   | Gọi `auth_handler.sh`, `mail_handler.sh`, `log_handler.sh`         |
-| `auth_handler.sh`    | Hiến Thanh Sang   | Xác thực `AUTH LOGIN` | Nhận base64 user/pass → trả `235` hoặc `535`                       |
-| `mail_handler.sh`    | Nguyễn Văn Lượm   | Lưu email             | Nhận FROM, TO, DATA                                                |
-| `log_handler.sh`     | Nguyễn Văn Lượm   | Ghi log hệ thống      | Hàm `log_event "TIME IP FROM TO STATUS"`                           |
+| `server_main.py`     | Nguyễn Văn Thắng  | Điều phối server      | Gọi `socket_listener.py`, chuyển stdin/stdout cho `smtp_parser.py` |
+| `socket_listener.py` | Nguyễn Ngọc Trung | Mở cổng TCP SMTP      | Truyền stdin/stdout của kết nối TCP                                |
+| `smtp_parser.py`     | Phan Đình Trọng   | Phân tích lệnh SMTP   | Gọi `auth_handler.py`, `mail_handler.py`, `log_handler.py`         |
+| `auth_handler.py`    | Hiến Thanh Sang   | Xác thực `AUTH LOGIN` | Nhận base64 user/pass → trả `235` hoặc `535`                       |
+| `mail_handler.py`    | Nguyễn Văn Lượm   | Lưu email             | Nhận FROM, TO, DATA                                                |
+| `log_handler.py`     | Nguyễn Văn Lượm   | Ghi log hệ thống      | Hàm `log_event "TIME IP FROM TO STATUS"`                           |
 
 ### PHẦN CLIENT
 
 | File               | Người thực hiện   | Chức năng        | Interface chuẩn                |
 | ------------------ | ----------------- | ---------------- | ------------------------------ |
-| `client_main.sh`   | Đinh Thành Đạt    | Điều phối client | Gọi các module client          |
-| `socket_client.sh` | Đinh Thành Đạt    | Kết nối server   | Truyền stdin/stdout            |
-| `auth_client.sh`   | Nguyễn Tấn Đạt    | Xác thực         | Gửi base64 user/pass           |
-| `mail_sender.sh`   | Huỳnh Phạm Tố Như | Gửi email        | MAIL FROM, RCPT TO, DATA, QUIT |
+| `client_main.py`   | Đinh Thành Đạt    | Điều phối client | Gọi các module client          |
+| `socket_client.py` | Đinh Thành Đạt    | Kết nối server   | Truyền stdin/stdout            |
+| `auth_client.py`   | Nguyễn Tấn Đạt    | Xác thực         | Gửi base64 user/pass           |
+| `mail_sender.py`   | Huỳnh Phạm Tố Như | Gửi email        | MAIL FROM, RCPT TO, DATA, QUIT |
 
 ---
 
@@ -143,19 +144,19 @@ smtp-linux/
 ### Bước 1: Cấp quyền thực thi
 
 ```bash
-chmod +x bin/*.sh server/*.sh client/*.sh
+chmod +x bin/*.py server/*.py client/*.py
 ```
 
 ### Bước 2: Chạy Server
 
 ```bash
-sh bin/start_server.sh
+sh bin/start_server.py
 ```
 
 ### Bước 3: Chạy Client
 
 ```bash
-sh bin/start_client.sh
+sh bin/start_client.py
 ```
 
 ---
