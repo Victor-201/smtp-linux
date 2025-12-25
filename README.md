@@ -66,15 +66,13 @@ Sau khi hoàn thành dự án, sinh viên có khả năng:
 
 * **Hệ điều hành:** Ubuntu Linux
 * **Ngôn ngữ:** Python 3
-* **Môi trường:** Terminal
+* **Môi trường:** Terminal Linux
 * **Không sử dụng:** Thư viện SMTP có sẵn
 
 ### Công cụ được phép sử dụng
 
-* `netcat (nc)` hoặc `socat`
-* `base64`
-* Các lệnh Linux cơ bản: `echo`, `read`, `printf`, `grep`, `cut`, `awk`, `date`, `mkdir`, `cat`
-
+* Thư viện Python chuẩn: socket, threading, base64, os, datetime
+* Các lệnh Linux cơ bản phục vụ thao tác hệ thống
 ---
 
 ## V. CẤU TRÚC THƯ MỤC DỰ ÁN
@@ -150,13 +148,13 @@ chmod +x bin/*.py server/*.py client/*.py
 ### Bước 2: Chạy Server
 
 ```bash
-sh bin/start_server.py
+python3 bin/start_server.py
 ```
 
 ### Bước 3: Chạy Client
 
 ```bash
-sh bin/start_client.py
+python3 bin/start_client.py
 ```
 
 ---
