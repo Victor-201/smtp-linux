@@ -1,7 +1,8 @@
 import socket
 
-def connect(host, port):
+def connect_server(host, port):
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.connect((host, port))
-    print(s.recv(1024).decode(), end="")
+    banner = s.recv(1024).decode("utf-8")
+    print(banner.strip())
     return s

@@ -1,2 +1,3 @@
-student1:123456
-student2:abcdef
+admin:123456
+user1:123456
+test:123456

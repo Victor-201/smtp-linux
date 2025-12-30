@@ -1,17 +1,20 @@
 import os
-from datetime import datetime
+import datetime
 
-def save_mail(mail_root, user, sender, recipient, content):
-    user_dir = os.path.join(mail_root, user)
+MAILBOX_DIR = "../data/mailbox"
+
+def save_mail(recipient, sender, data_content):
+    user_dir = os.path.join(MAILBOX_DIR, recipient)
     os.makedirs(user_dir, exist_ok=True)
-
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    filepath = os.path.join(user_dir, f"{timestamp}.eml")
-
-    with open(filepath, "w") as f:
+    
+    timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+    filename = f"{timestamp}.eml"
+    filepath = os.path.join(user_dir, filename)
+    
+    with open(filepath, "w", encoding="utf-8") as f:
         f.write(f"From: {sender}\n")
         f.write(f"To: {recipient}\n")
-        f.write("Content-Type: text/plain\n\n")
-        f.write(content)
-
+        f.write(f"Date: {datetime.datetime.now().strftime('%a, %d %b %Y %H:%M:%S')}\n")
+        f.write(data_content)
+    
     return filepath

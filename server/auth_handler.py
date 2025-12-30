@@ -1,32 +1,28 @@
 import base64
+import os
 
-def load_users(path):
+USERS_FILE = "../config/users.txt"
+
+def load_users():
     users = {}
-    with open(path, "r") as f:
-        for line in f:
-            line = line.strip()
-            if ":" in line:
-                u, p = line.split(":", 1)
-                users[u] = p
+    if os.path.exists(USERS_FILE):
+        with open(USERS_FILE, "r", encoding="utf-8") as f:
+            for line in f:
+                line = line.strip()
+                if line and ":" in line:
+                    username, password = line.split(":", 1)
+                    users[username] = password
     return users
 
-def auth_login(conn, users):
-    conn.send(b"334 VXNlcm5hbWU6\r\n")
-    user_b64 = conn.recv(1024).strip()
+USERS = load_users()
 
-    conn.send(b"334 UGFzc3dvcmQ6\r\n")
-    pass_b64 = conn.recv(1024).strip()
-
+def authenticate(username_b64, password_b64):
     try:
-        user = base64.b64decode(user_b64).decode()
-        password = base64.b64decode(pass_b64).decode()
+        username = base64.b64decode(username_b64).decode("utf-8").strip()
+        password = base64.b64decode(password_b64).decode("utf-8").strip()
+        if username in USERS and USERS[username] == password:
+            return True, username
+        else:
+            return False, ""
     except:
-        conn.send(b"535 Authentication failed\r\n")
-        return False, None
-
-    if user in users and users[user] == password:
-        conn.send(b"235 Authentication successful\r\n")
-        return True, user
-    else:
-        conn.send(b"535 Authentication failed\r\n")
-        return False, None
+        return False, ""
