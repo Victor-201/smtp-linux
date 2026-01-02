@@ -1,14 +1,15 @@
-def send_mail(sock, mail_from, rcpt_to, subject, body):
-    sock.send(f"MAIL FROM:<{mail_from}>\r\n".encode())
-    print(sock.recv(1024).decode("utf-8").strip())
-    
-    for recipient in rcpt_to:
-        sock.send(f"RCPT TO:<{recipient}>\r\n".encode())
-        print(sock.recv(1024).decode("utf-8").strip())
-    
-    sock.send(b"DATA\r\n")
-    print(sock.recv(1024).decode("utf-8").strip())
-    
-    message = f"Subject: {subject}\r\n\r\n{body}\r\n.\r\n"
-    sock.send(message.encode())
-    print(sock.recv(1024).decode("utf-8").strip())
+def enc(s):
+    return s.strip().encode("utf-8", errors="ignore")
+
+def send_mail(sock, from_addr, to_addr, subject, body):
+    sock.sendall(b"MAIL FROM:<" + enc(from_addr) + b">\r\n")
+    print(sock.recv(1024).decode().strip())
+    sock.sendall(b"RCPT TO:<" + enc(to_addr) + b">\r\n")
+    print(sock.recv(1024).decode().strip())
+    sock.sendall(b"DATA\r\n")
+    print(sock.recv(1024).decode().strip())
+    sock.sendall(b"Subject: " + enc(subject) + b"\r\n\r\n")
+    for line in body.split("\n"):
+        sock.sendall(enc(line) + b"\r\n")
+    sock.sendall(b".\r\n")
+    print(sock.recv(1024).decode().strip())

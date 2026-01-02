@@ -1,45 +1,33 @@
-import configparser
-from .socket_client import connect_server
-from .auth_client import auth_login
-from .mail_sender import send_mail
+from client.socket_client import connect
+from client.auth_client import auth_login
+from client.mail_sender import send_mail
 
 def main():
-    config = configparser.ConfigParser()
-    config.read("../config/server.conf")
-    host = config["server"]["host"]
-    port = int(config["server"]["port"])
-    
-    sock = connect_server(host, port)
-    
-    sock.send(b"HELO client.local\r\n")
-    print(sock.recv(1024).decode("utf-8").strip())
-    
-    username = input("Username: ")
+    sock = connect()
+    sock.sendall(b"HELO client\r\n")
+    print(sock.recv(1024).decode().strip())
+    username = input("Username or Email: ")
     password = input("Password: ")
-    
-    if not auth_login(sock, username, password):
-        print("Đăng nhập thất bại!")
-        sock.send(b"QUIT\r\n")
+    ok, email = auth_login(sock, username, password)
+    if not ok:
+        sock.sendall(b"QUIT\r\n")
         sock.close()
         return
-    
-    mail_from = input("From: ")
-    rcpt_input = input("To (cách nhau bởi dấu phẩy): ")
-    rcpt_to = [r.strip() for r in rcpt_input.split(",")]
+    from_addr = email if email else username
+    if email:
+        print(f"From: {email}")
+    to_addr = input("To: ")
     subject = input("Subject: ")
-    print("Body (kết thúc bằng dòng chỉ chứa dấu chấm '.'): ")
-    body_lines = []
+    print("Body (end with '.'): ")
+    lines = []
     while True:
-        line = input()
-        if line == ".":
+        l = input()
+        if l == ".":
             break
-        body_lines.append(line)
-    body = "\n".join(body_lines)
-    
-    send_mail(sock, mail_from, rcpt_to, subject, body)
-    
-    sock.send(b"QUIT\r\n")
-    print(sock.recv(1024).decode("utf-8").strip())
+        lines.append(l)
+    send_mail(sock, from_addr, to_addr, subject, "\n".join(lines))
+    sock.sendall(b"QUIT\r\n")
+    print(sock.recv(1024).decode().strip())
     sock.close()
 
 if __name__ == "__main__":

@@ -1,28 +1,25 @@
-import base64
-import os
+import base64, os, hashlib, hmac
 
-USERS_FILE = "../config/users.txt"
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+USER_FILE = os.path.join(BASE_DIR, "config", "users.txt")
 
-def load_users():
-    users = {}
-    if os.path.exists(USERS_FILE):
-        with open(USERS_FILE, "r", encoding="utf-8") as f:
-            for line in f:
-                line = line.strip()
-                if line and ":" in line:
-                    username, password = line.split(":", 1)
-                    users[username] = password
-    return users
+def sha256(s):
+    return hashlib.sha256(s.encode()).hexdigest()
 
-USERS = load_users()
-
-def authenticate(username_b64, password_b64):
+def authenticate(user_b64, pass_b64):
     try:
-        username = base64.b64decode(username_b64).decode("utf-8").strip()
-        password = base64.b64decode(password_b64).decode("utf-8").strip()
-        if username in USERS and USERS[username] == password:
-            return True, username
-        else:
-            return False, ""
-    except:
-        return False, ""
+        login = base64.b64decode(user_b64).decode().strip()
+        password = base64.b64decode(pass_b64).decode().strip()
+        pwd_hash = sha256(password)
+        with open(USER_FILE, "r", encoding="utf-8") as f:
+            for line in f:
+                if ":" not in line or line.startswith("#"):
+                    continue
+                username, stored, email = line.strip().split(":", 2)
+                if login == username or login == email:
+                    if hmac.compare_digest(pwd_hash, stored):
+                        return True, {"username": username, "email": email}
+                    return False, None
+        return False, None
+    except Exception:
+        return False, None

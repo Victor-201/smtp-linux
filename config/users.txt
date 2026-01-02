@@ -1,3 +1,3 @@
-admin:123456
-user1:123456
-test:123456
+user1:bd94dcda26fccb4e68d6a31f9b5aac0b571ae266d822620e901ef7ebe3a11d4f:4.victor.201@gmail.com
+user2:bd94dcda26fccb4e68d6a31f9b5aac0b571ae266d822620e901ef7ebe3a11d4f:default.name201@gmail.com
+admin:bd94dcda26fccb4e68d6a31f9b5aac0b571ae266d822620e901ef7ebe3a11d4f:admin@gmail.com
