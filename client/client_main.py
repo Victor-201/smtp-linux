@@ -14,8 +14,6 @@ def main():
         sock.close()
         return
     from_addr = email if email else username
-    if email:
-        print(f"From: {email}")
     to_addr = input("To: ")
     subject = input("Subject: ")
     print("Body (end with '.'): ")

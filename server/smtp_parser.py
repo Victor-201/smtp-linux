@@ -49,7 +49,7 @@ class SMTPParser:
                 self.authenticated = True
                 self.state = STATE_MAIL
                 log_event(ip=self.ip, auth_status="LOGIN", message=f"{user['username']} <{user['email']}>")
-                return "235 Authentication successful"
+                return ("235 Authentication successful\r\n"f"From: {user['email']}\r\n")
             log_event(ip=self.ip, auth_status="FAILED")
             self.reset()
             return "535 Authentication failed"
